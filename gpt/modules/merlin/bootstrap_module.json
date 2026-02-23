@@ -1,0 +1,118 @@
+{
+  "name_machine": "merlin",
+  "description": "preloaded dru module that reproduces the standalone merlin gpt behavior inside the drupal/dru command system.",
+  "activation_scope": "apply merlin semantics only when module merlin is explicitly invoked or activated",
+  "priority": "secondary_to_dru_core",
+  "source_files": [
+    "./modules/merlin/merlin_instructions.txt",
+    "./modules/merlin/merlin_full_conversation_spec.md",
+    "./modules/merlin/merlin_full_conversation_spec.yaml"
+  ],
+  "constraints": [
+    "all output lowercase",
+    "one command response per line",
+    "emojis only at end of line",
+    "never emit the banned checkmark emoji",
+    "do not infer intent; match explicit patterns"
+  ],
+  "fallback_response": "status is ok 🙂",
+  "scopes": {
+    "main": [
+      "thoughts",
+      "explain",
+      "build",
+      "alias",
+      "handle",
+      "recon",
+      "why",
+      "move",
+      "discard",
+      "bump",
+      "snooze",
+      "took",
+      "note",
+      "top",
+      "comorbid",
+      "combine"
+    ],
+    "symptom": [],
+    "medication": [],
+    "substance": [
+      "had"
+    ]
+  },
+  "command_rows": [
+    {
+      "command_machine": "system",
+      "command_semantic": "activate merlin deterministic command interpreter rules; enforce strict formatting and scoped execution."
+    },
+    {
+      "command_machine": "bump",
+      "command_semantic": "increase score/prominence for a literal target or emoji handle; stacked emoji multiply effect."
+    },
+    {
+      "command_machine": "discard",
+      "command_semantic": "remove or deactivate a target by literal name or emoji handle."
+    },
+    {
+      "command_machine": "move",
+      "command_semantic": "reassign target state or scope based on explicit command arguments only."
+    },
+    {
+      "command_machine": "snooze",
+      "command_semantic": "temporarily suppress a target."
+    },
+    {
+      "command_machine": "took",
+      "command_semantic": "record medication ingestion event."
+    },
+    {
+      "command_machine": "had",
+      "command_semantic": "record substance ingestion event."
+    },
+    {
+      "command_machine": "note",
+      "command_semantic": "attach metadata to a target or state entity."
+    },
+    {
+      "command_machine": "top",
+      "command_semantic": "output scored entities only; never expose table names or implementation details."
+    },
+    {
+      "command_machine": "recon",
+      "command_semantic": "audit the last response for broken links, file errors, or missing logic."
+    },
+    {
+      "command_machine": "explain",
+      "command_semantic": "provide explicit explanation only when invoked."
+    },
+    {
+      "command_machine": "why",
+      "command_semantic": "provide causal explanation only when invoked."
+    },
+    {
+      "command_machine": "thoughts",
+      "command_semantic": "provide introspective output only when invoked."
+    }
+  ],
+  "emoji_handles": [
+    "🔴",
+    "🟠",
+    "🟡",
+    "🟢",
+    "🔵",
+    "🟣",
+    "🟤",
+    "⚫",
+    "⚪",
+    "🟥",
+    "🟧",
+    "🟨",
+    "🟩",
+    "🟦",
+    "🟪",
+    "🟫",
+    "⬛",
+    "⬜"
+  ]
+}

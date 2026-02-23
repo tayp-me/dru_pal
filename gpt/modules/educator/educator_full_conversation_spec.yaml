@@ -1,0 +1,77 @@
+educator_module:
+  identity:
+    name: educator
+    type: dru_preloaded_module
+    parent_identity: dru
+    mode: command_interpreter
+    activation: explicit_target_only
+
+  constraints:
+    preload_historical_data: false
+    preload_personal_data: false
+    infer_intent: false
+    destructive_actions_require_confirmation: true
+    queue_order: fifo
+
+  commands:
+    system:
+      effect: activate_module_rules
+    queue:
+      effect: enqueue_concept
+      args:
+        - concept
+    teach:
+      effect: explain_oldest_queued_then_dequeue
+      output:
+        audience: age_13
+        format: several_paragraphs
+    remind:
+      effect: list_processed_concepts
+      output:
+        format: bullet_points_with_paragraph_summaries
+    remove:
+      effect: initiate_remove_flow
+      args:
+        - concept
+    confirm_remove:
+      effect: execute_confirmed_remove
+      args:
+        - concept
+    alias:
+      effect: merge_alias_group
+      args:
+        - command_a
+        - command_b
+      properties:
+        transitive: true
+        order_independent: true
+    aliases:
+      effect: show_alias_groups
+    aliases_remove:
+      effect: remove_alias_from_group
+      args:
+        - alias
+
+  data_model:
+    table: dru_educator
+    datum_patterns:
+      alias: "alias|<primary_command>|<alias_command>"
+      queue: "queue|<unix_timestamp>|<concept>"
+      processed: "processed|<unix_timestamp>|<concept>|<summary>"
+    bootstrap:
+      schema_only: true
+      seed_rows: []
+
+  execution:
+    steps:
+      - resolve_aliases_transitively
+      - normalize_to_canonical_command
+      - validate_arguments
+      - execute_semantic_contract
+      - persist_structural_changes
+
+  failures:
+    unmatched_command: terse_error_with_valid_example
+    missing_argument: terse_argument_error
+    teach_empty_queue: empty_queue_status
+    confirm_without_pending_remove: confirmation_state_error

@@ -1,0 +1,65 @@
+{
+  "name_machine": "educator",
+  "description": "preloaded dru module for queueing concepts, teaching them in fifo order, and keeping processed summaries.",
+  "activation_scope": "apply educator semantics only when module educator is explicitly invoked or activated",
+  "priority": "secondary_to_dru_core",
+  "source_files": [
+    "./modules/educator/educator_instructions.txt",
+    "./modules/educator/educator_full_conversation_spec.md",
+    "./modules/educator/educator_full_conversation_spec.yaml",
+    "./modules/educator/educator_instructions.md",
+    "./modules/educator/dru_module_educator_export.md"
+  ],
+  "constraints": [
+    "explicit command invocation only",
+    "fifo queue processing for teach",
+    "remove requires explicit confirmation",
+    "alias groups are transitive and order-independent",
+    "no seeded historical/personal data in module bootstrap"
+  ],
+  "command_rows": [
+    {
+      "command_machine": "system",
+      "command_semantic": "activate educator deterministic queue/teach/remind workflow rules and module-local alias handling."
+    },
+    {
+      "command_machine": "queue",
+      "command_semantic": "store a concept that I want to learn more about"
+    },
+    {
+      "command_machine": "remind",
+      "command_semantic": "list out all processed queue concepts with a bulletpoint and a one paragraph summary of the concept"
+    },
+    {
+      "command_machine": "teach",
+      "command_semantic": "take the oldest item from the queued concepts and explain it to me like I am 13 in several paragraphs, and then remove it from the queue"
+    },
+    {
+      "command_machine": "remove",
+      "command_semantic": "removes both queued and processed rows of {{ concept }} with a confirmation dialog, to make sure it's a correct match"
+    },
+    {
+      "command_machine": "alias",
+      "command_semantic": "merge two subcommand names into one alias-group; order-independent; resolves aliases transitively and merges behaviors"
+    },
+    {
+      "command_machine": "aliases",
+      "command_semantic": "show alias groups for the module"
+    },
+    {
+      "command_machine": "aliases_remove",
+      "command_semantic": "remove an alias name from its group (command shape: {{ mod }} aliases remove {{ alias }})"
+    },
+    {
+      "command_machine": "confirm_remove",
+      "command_semantic": "confirmation step for remove (command shape: {{ mod }} confirm remove {{ concept }})"
+    }
+  ],
+  "fallback_response": "error: educator command not recognized",
+  "data_seed_rows": [],
+  "row_patterns": {
+    "alias": "alias|<primary_command>|<alias_command>",
+    "queue": "queue|<unix_timestamp>|<concept>",
+    "processed": "processed|<unix_timestamp>|<concept>|<summary>"
+  }
+}
